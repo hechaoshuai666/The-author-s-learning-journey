@@ -10,11 +10,11 @@
 
 ### 1. 创建远程仓库
 
-![image-20200916215302479](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200916215302479.png)
+![](https://img2020.cnblogs.com/blog/1885265/202009/1885265-20200917104209475-323774552.png)
 
 创建后会显示这个
 
-![image-20200916215510478](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200916215510478.png)
+![](https://img2020.cnblogs.com/blog/1885265/202009/1885265-20200917104239022-2049156838.png)
 
 两种方式建立本地与远程的连接
 
@@ -104,7 +104,7 @@
 
 记录,简单来说就只要结果,中间的过程我不想看到,此时可以通过rebase命令合并中间的记录
 
-![image-20200917094454000](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200917094454000.png)
+![](https://img2020.cnblogs.com/blog/1885265/202009/1885265-20200917104255509-765422543.png)
 
 此时我们有四条提交记录,要想把v2,v3,v4合并
 
@@ -131,7 +131,7 @@
 
 那就是rebase(变基)
 
-![image-20200917101320442](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200917101320442.png)
+![](https://img2020.cnblogs.com/blog/1885265/202009/1885265-20200917104310670-176643342.png)
 
 传统的merge是这种情况的
 
@@ -142,7 +142,7 @@
 + 转换到dev分支,git rebase master
 + 再切换到master分支,git merge dev 或者 git rebase dev
 
-![image-20200917101548815](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200917101548815.png)
+![](https://img2020.cnblogs.com/blog/1885265/202009/1885265-20200917104323392-1984245565.png)
 
 就会出现这样的记录,是不是比之前分支的要清爽的多
 
