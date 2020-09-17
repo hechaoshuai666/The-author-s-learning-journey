@@ -1,0 +1,176 @@
+## Git远程仓库(三)
+
+前面我们已经体验过本地代码管理了,但有的时候我们想在别的地方也能继续
+
+之前的代码操作或管理,虽然有很多方式(U盘,百度网盘等之类的)
+
+但这都不是码农的最佳选择,现在有很多的代码托管平台
+
+如:github,gitlab,gitee. 这里我们用github做演示
+
+### 1. 创建远程仓库
+
+![image-20200916215302479](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200916215302479.png)
+
+创建后会显示这个
+
+![image-20200916215510478](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200916215510478.png)
+
+两种方式建立本地与远程的连接
+
++ git clone url (直接将远程的仓库克隆到本地,默认会执行git remote add origin url)
++ git remote add origin url
+
+注 : 这里的origin可以任意填写,就是url的别名
+
+### 2. 远程管理命令
+
++ 推送代码
+
+  ```bash
+  git push -u origin 分支名 # 该代码跟git push origin 分支名没什么区别 加了-u以后执行git push就跟 git push origin 分支名一样的
+  ```
+
++ 拉取代码
+
+  ```bash
+  git pull origin dev
+  等价于 
+  git fetch origin dev
+  git merge origin/dev
+  ```
+
+  
+
+### 3. 不同环境的开发实操
+
+假设我们有两个工作环境,一个在家,一个在公司
+
+首先在家写好一系列代码,上传到远程仓库
+
+到了公司
+
++ 第一步:拉取远程的仓库代码
+
+  ```bash
+  git clone url # 该操作默认会拉取远程仓库的所有代码和分支,虽然本地git branch只会显示master分支,但还是可以git checkout 分支名
+  ```
+
++ 在公司一顿操作,写好上传到远程仓库
+
+  ```bash
+  # 如果远程仓库有很多分支,最好把本地的所有分支都推上去
+  ```
+
++ 回到家,拉取远程的代码
+
+  ```bash
+  git pull origin 分支名 
+  # 每次写完代码都要记得提交,然后再拉取
+  ```
+
++ 然后循环操作
+
++ 忘记提交代码到远程?
+
+  上面的操作似乎很理想,但是万一有一天(在公司写了一半的代码),忘记把本地代码提交到远程仓库了
+
+  在家的pull肯定是没有变化的,假设我们在家完成剩下的代码开发,推到远程仓库
+
+  回到公司pull下来,一般情况下会发生冲突,上面已经写过了
+
+  ```bash
+  git pull origin dev
+  等价于 
+  git fetch origin dev
+  git merge origin/dev
+  ```
+
+  发生了冲突则需要手动解决冲突
+
+### 其他操作
+
++ rebase的作用?
+
+  ```bash
+  # 简单来说rebase就是让我们的代码提交记录更简洁
+  ```
+
+### rebase的应用场景一
+
+前面我们已经知道,git的工作流类似于节点,一次提交保留一个节点,在我们开发阶段的时候
+
+难免会留下很多提交的记录,但公司的领导可能只想看到上一个版本的记录和下一个版本的
+
+记录,简单来说就只要结果,中间的过程我不想看到,此时可以通过rebase命令合并中间的记录
+
+![image-20200917094454000](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200917094454000.png)
+
+此时我们有四条提交记录,要想把v2,v3,v4合并
+
+首先
+
++ git rebase -i 版本号(例如我们选择v2,就把v4到v2的记录合并)
++ git rebase -i HEAD~数字(数字几就表示合并最近几次的记录)
+
+![1534099534632](https://images2018.cnblogs.com/blog/1283612/201808/1283612-20180813030742762-1378297184.png)
+
+会出现这样的编辑框,emmm不知道为啥,我的记录出问题了,总之你选到几,就会出现几条记录,只需要把除第一条的记录前的pick改成s,下面有注释,这里就不解释了,保存退出即可
+
+![1534100031781](https://images2018.cnblogs.com/blog/1283612/201808/1283612-20180813030743228-96341118.png)
+
+还会出现编辑提交信息的文本框,改成自己想提交的即可
+
+注:当本地版本跟远程仓库没同步的时候,最好不要合并记录,免得出现问题
+
+### rebase的应用场景二
+
+之前我们提到过,当开启多个分支,节点自然就会分叉,merge也是如此,次数多了自然显得整个git树很不
+
+完美,有没有什么办法开启多个分支且保证是一条直线的
+
+那就是rebase(变基)
+
+![image-20200917101320442](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200917101320442.png)
+
+传统的merge是这种情况的
+
+先说下步骤,前面分支的开发没啥区别,合并的时候要注意了
+
+如果是master想合并dev的
+
++ 转换到dev分支,git rebase master
++ 再切换到master分支,git merge dev 或者 git rebase dev
+
+![image-20200917101548815](C:\Users\WilliamWeson\AppData\Roaming\Typora\typora-user-images\image-20200917101548815.png)
+
+就会出现这样的记录,是不是比之前分支的要清爽的多
+
+### rebase的应用场景三
+
+我们拉取代码的时候,其实分了两步
+
++ git fetch origin master
++ git merge origin/master
+
+这里的merge也会产生分支,要想不产生分支
+
+同理
+
++ 先git fetch,不能再git pull
+
++ git rebase
+
+  ```bash
+  # 可能会产生冲突,产生冲突自己手动解决,先git add,然后再根据文本提示符git rebase --continue,合并记录就好了
+  ```
+
+  
+
+出现冲突是经常的事,我们要手动vim查看冲突的文件,比较麻烦
+
+有没有让我们少掉头发的软件呢,那必然有的
+
+beyond compare就是这样的软件,关于使用方法
+
+百度一大堆,我这里就不演示了,因为我没钱购买
